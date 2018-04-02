@@ -1,0 +1,9 @@
+./action_helpers
+./screenshot_helper
+.vscode/
+*.DS_Store
+
+.github/
+.gitignore
+
+index.ts
