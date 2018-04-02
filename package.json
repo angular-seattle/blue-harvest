@@ -1,0 +1,39 @@
+{
+  "name": "blue-harvest",
+  "version": "1.0.0",
+  "description": "protractor helpers",
+  "scripts": {
+    "tsc": "tsc",
+    "dist": "./scripts/dist.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular-seattle/blue-harvest.git"
+  },
+  "keywords": [
+    "protractor",
+    "angular",
+    "test",
+    "testing",
+    "helpers",
+    "selenium",
+    "webdriver",
+    "screenshot"
+  ],
+  "author": "Craig Nishina <craig.nishina@gmail.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/angular-seattle/blue-harvest/issues"
+  },
+  "homepage": "https://github.com/angular-seattle/blue-harvest#readme",
+  "dependencies": {
+    "looks-same": "^3.3.0",
+    "protractor": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^9.6.1",
+    "typescript": "^2.8.1"
+  }
+}
