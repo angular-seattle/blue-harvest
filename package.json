@@ -1,10 +1,11 @@
 {
   "name": "blue-harvest",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "protractor helpers",
   "scripts": {
     "tsc": "tsc",
-    "dist": "./scripts/dist.sh"
+    "dist": "./scripts/dist.sh",
+    "prepublish": "npm run dist"
   },
   "repository": {
     "type": "git",
