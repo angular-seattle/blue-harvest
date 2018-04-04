@@ -29,9 +29,10 @@ let looksSame: LooksSame = require('looks-same');
  */
 export async function compareScreenshot(data, golden) {
   let screenshotPath = await writeScreenshot(data);
-  console.log('UPDATE_SCREENSHOTS: ' + process.env['UPDATE_SCREENSHOTS']);
-  if (process.env['UPDATE_SCREENSHOTS'] != '0') {
-    console.log('Writing new screenshot');
+  const update = process.env['UPDATE_GOLDENS'] == "1"||
+      process.env['UPDATE_GOLDENS'] === "true";
+  if (update) {
+    console.log('Updating reference images instead of comparing.');
     fs.writeFileSync(golden, fs.readFileSync(screenshotPath));
     return true;
   } else {
