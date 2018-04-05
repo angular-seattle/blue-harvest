@@ -22,13 +22,14 @@ const SLOW_FIND_TIMEOUT = 90 * 1000;
 const AGONIZINGLY_SLOW_FIND_TIMEOUT = 10 * 60 * 1000;
 const PAGE_LOAD_TIMEOUT = 60 * 1000;
 
-// We want to fast fail if this file is ever loaded in a context where
-// the WebDriverJS control flow is turned on.
+// Disable the promise manager if it hasn't already been. We rely on Protractor
+// to set this when it reads the config file, and in some situations this code
+// may run before that happens.
 if ((webdriver.promise as any).USE_PROMISE_MANAGER) {
-  throw new Error(
-      'The Pantheon helpers at cloud/console/integration/helpers ' +
-      'cannot be used when the webdriver control flow is turned on. Remove ' +
-      'enable_control_flow = True from your test suite.');
+  (webdriver.promise as any).USE_PROMISE_MANAGER = false;
+  console.warn('Disabling the WebDriver promise manager. This might cause ' +
+      'unexpected behavior. Please make sure you set ' +
+      'SELENIUM_PROMISE_MANAGER=false in your Protractor config.');
 }
 
 interface Timing {
