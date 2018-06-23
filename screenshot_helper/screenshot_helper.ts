@@ -26,9 +26,11 @@ let looksSame: LooksSame = require('looks-same');
  *
  * @param data The screenshot image data.
  * @param golden The path to the golden image to compare to.
+ * @param [outputFolder] Path where to save the diff
  */
-export async function compareScreenshot(data, golden) {
-  let screenshotPath = await writeScreenshot(data);
+export async function compareScreenshot(data, golden, outputFolder = undefined) {
+  const tempFolder = createTempFolder();
+  let screenshotPath = await writeScreenshot(tempFolder, data);
   const update = process.env['UPDATE_GOLDENS'] == "1"||
       process.env['UPDATE_GOLDENS'] === "true";
   if (update) {
@@ -36,13 +38,15 @@ export async function compareScreenshot(data, golden) {
     fs.writeFileSync(golden, fs.readFileSync(screenshotPath));
     return true;
   } else {
+    const goldenName = path.basename(golden);
+    const diffPath = `${outputFolder || tempFolder}}${path.sep}${goldenName}_diff.png`;
     return new Promise<boolean>((resolve, reject) => {
       looksSame(screenshotPath, golden, {strict: false, tolerance: 2.5}, (error, equal) => {
         if (!equal) {
           looksSame.createDiff({
             reference: golden,
             current: screenshotPath,
-            diff: 'diff.png',
+            diff: diffPath,
             highlightColor: '#ff00ff',  // color to highlight the differences
           }, (error) => {
             reject(`Screenshots do not match for ${golden}.`)
@@ -55,11 +59,13 @@ export async function compareScreenshot(data, golden) {
   }
 }
 
+function createTempFolder() {
+  return fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
+}
 /**
  *  Write a screenshot to disk in a new temporary path.
  */
-async function writeScreenshot(data) {
-  const folder = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
+async function writeScreenshot(folder, data) {
   let screenshotFile = path.join(folder, 'new.png');
   fs.writeFileSync(screenshotFile, data, 'base64');
   return screenshotFile;
