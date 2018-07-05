@@ -17,6 +17,7 @@ interface BrowserSidePositionalLocator {
 
 export interface BrowserSideOptions {
   allowUnseen?: boolean;
+  allowCovered?: boolean;
   wantZero?: boolean;
   enabled?: boolean;
   disabled?: boolean;
