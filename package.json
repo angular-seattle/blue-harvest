@@ -1,6 +1,6 @@
 {
   "name": "blue-harvest",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "protractor helpers",
   "scripts": {
     "tsc": "tsc",
