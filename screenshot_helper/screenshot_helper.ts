@@ -42,7 +42,7 @@ export async function compareScreenshot(data, golden) {
           looksSame.createDiff({
             reference: golden,
             current: screenshotPath,
-            diff: 'diff.png',
+            diff: `diff-${path.basename(golden)}`,  // create a diff with the name of the golden file
             highlightColor: '#ff00ff',  // color to highlight the differences
           }, (error) => {
             reject(`Screenshots do not match for ${golden}.`)
