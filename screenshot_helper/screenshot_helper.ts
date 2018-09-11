@@ -31,8 +31,8 @@ let looksSame: LooksSame = require('looks-same');
 export async function compareScreenshot(data, golden, outputFolder = undefined) {
   const tempFolder = createTempFolder();
   let screenshotPath = await writeScreenshot(tempFolder, data);
-  const update = process.env['UPDATE_GOLDENS'] == "1"||
-      process.env['UPDATE_GOLDENS'] === "true";
+  const update = process.env['UPDATE_GOLDENS'] == '1'||
+    process.env['UPDATE_GOLDENS'] === 'true';
   if (update) {
     console.log('Updating reference images instead of comparing.');
     fs.writeFileSync(golden, fs.readFileSync(screenshotPath));
@@ -41,20 +41,22 @@ export async function compareScreenshot(data, golden, outputFolder = undefined) 
     const goldenName = path.basename(golden);
     const diffPath = `${outputFolder || tempFolder}}${path.sep}${goldenName}_diff.png`;
     return new Promise<boolean>((resolve, reject) => {
-      looksSame(screenshotPath, golden, {strict: false, tolerance: 2.5}, (error, equal) => {
-        if (!equal) {
-          looksSame.createDiff({
-            reference: golden,
-            current: screenshotPath,
-            diff: diffPath,
-            highlightColor: '#ff00ff',  // color to highlight the differences
-          }, (error) => {
-            reject(`Screenshots do not match for ${golden}.`)
-          });
-        } else {
-          resolve(true);
-        }
-      });
+      looksSame(screenshotPath, golden, {strict: false, tolerance: 2.5},
+        async (error, equal) => {
+          if (!equal) {
+            await looksSame.createDiff({
+              reference: golden,
+              current: screenshotPath,
+              diff: diffPath,
+              highlightColor: '#ff00ff',  // color to highlight the differences
+            }, (err) => {
+              console.log('SAVING DIFF ERROR: ' + err);
+            });
+            reject(`no match. error: ${error}`);
+          } else {
+            resolve(true);
+          }
+        });
     });
   }
 }
@@ -71,7 +73,7 @@ async function writeScreenshot(folder, data) {
   return screenshotFile;
 }
 
-export async function addMask(el: ElementFinder, color) {  
+export async function addMask(el: ElementFinder, color) {
   let size = await el.getSize();
   let location = await el.getLocation();
   await browser.executeScript(mask_fn,
