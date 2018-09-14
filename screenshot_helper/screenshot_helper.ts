@@ -2,7 +2,8 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import {browser, ElementFinder} from 'protractor';
+import { browser, ElementFinder, WebElement } from 'protractor';
+
 let mask_fn = require('./mask').MASK_FN;
 
 /*
@@ -26,10 +27,11 @@ let looksSame: LooksSame = require('looks-same');
  *
  * @param data The screenshot image data.
  * @param golden The path to the golden image to compare to.
- * @param outputFolder (optional) path where to save the diff. if it is not provided, the difference image will not be saved.
+ * @param outputFolder (optional) path where to save the diff. if it is not provided, the difference image will not be
+ *   saved.
  */
 export async function compareScreenshot(data, golden, outputFolder = undefined): Promise<string> {
-  return new Promise<any>(async (resolve, reject) => {
+  return new Promise<string>(async (resolve, reject) => {
     const tempFolder = createTempFolder();
     const screenshotPath = await writeScreenshot(tempFolder, data);
     // check if goldens need to be updated
@@ -82,7 +84,10 @@ async function writeScreenshot(folder, data) {
 export async function addMask(el: ElementFinder, color) {
   let size = await el.getSize();
   let location = await el.getLocation();
-  await browser.executeScript(mask_fn,
-    location.x, location.y,
-    size.width, size.height, color);
+  const mask: WebElement = <WebElement> await browser.executeScript(mask_fn, location.x, location.y, size.width, size.height, color, '10000');
+  return mask;
+}
+
+export async function removeMask(mask: WebElement) {
+  await browser.executeScript("arguments[0].parentNode.removeChild(arguments[0])", mask);
 }

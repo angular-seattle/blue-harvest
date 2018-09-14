@@ -5,6 +5,7 @@ exports.MASK_FN = function() {
   var width = arguments[2];
   var height = arguments[3];
   var color = arguments[4];
+  var z_index = arguments[5];
   console.log('Masking ', top, left, width, height);
 
   var el = document.createElement('div');
@@ -17,4 +18,7 @@ exports.MASK_FN = function() {
   el.style['left'] = left + 'px';
   el.style['width'] = width + 'px';
   el.style['height'] =height + 'px';
+  el.style['zIndex'] = z_index;
+  
+  return el;
 };
