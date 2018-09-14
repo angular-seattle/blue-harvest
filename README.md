@@ -15,9 +15,10 @@ To regulate the resolution of the screenshots, add
 To test if a page has changed from a previous screenshot:
 ```
 let result =  await blueharvest.compareScreenshot(
-                   await browser.takeScreenShot(), pathToGolden);
+                   await browser.takeScreenShot(), pathToGolden, destForDiffImage);
 ```
-The difference between the two screenshots will be highlighted in pink.
+The difference between the two screenshots will be highlighted in pink. The third parameter defines where to save the difference images and is optional. If the destination path
+for the created difference image is not given but the test fails, `compareScreenshot` will still reject the promise, but will not save the difference image. 
 
 ### Updating Reference Screenshots
 When a change in a page is expected and not a regression, you can update the reference screenshots by
