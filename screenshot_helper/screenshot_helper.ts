@@ -37,9 +37,8 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
     // check if goldens need to be updated
     const update = process.env['UPDATE_GOLDENS'] === '1' || process.env['UPDATE_GOLDENS'] === 'true';
     if (update) {
-      console.log('Updating reference images instead of comparing.');
       fs.writeFileSync(golden, fs.readFileSync(screenshotPath));
-      resolve('Reference images are successfully updated.');
+      resolve('Reference image ' + golden +' was successfully updated.');
       return;
     }
     const goldenName = path.basename(golden);
@@ -47,6 +46,10 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
       strict: false,
       tolerance: 2.5,
     }, async (error, equal) => {
+      if (error) {
+        reject("There has been an error. Error: " + error);
+        return;
+      }
       if (!equal) {
         if (outputFolder) {
           const diffPath = `${outputFolder}/${goldenName}_diff.png`;
@@ -81,10 +84,11 @@ async function writeScreenshot(folder, data) {
   return screenshotFile;
 }
 
-export async function addMask(el: ElementFinder, color) {
+export async function addMask(el: ElementFinder, color, z_index = 10000, x_offset = 0, y_offset = 0, size_multiplier = 1.0) {
   let size = await el.getSize();
   let location = await el.getLocation();
-  const mask: WebElement = <WebElement> await browser.executeScript(mask_fn, location.x, location.y, size.width, size.height, color, '10000');
+  const mask: WebElement = <WebElement> await browser.executeScript(mask_fn, location.x + x_offset, location.y + y_offset,
+    size.width*size_multiplier, size.height*size_multiplier, color, z_index);
   return mask;
 }
 

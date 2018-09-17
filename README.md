@@ -32,7 +32,17 @@ add a npm script that runs `bash ./filename.sh` to update the reference screensh
 ### Adding Masks
 If there is a part on a page that should be ignored in the screenshot tests, 
 you can add a coloured mask to a certain element before you take the screenshot so it will not be compared each time the tests run.
+`addMask()` returns the mask element, which can be passed to `removeMask()` to be removed.
 ```
-let e = element(by.css('element_to_ignore'));
-await blueharvest.addMask(e, 'gray');
+const e = element(by.css('element_to_ignore'));
+const mask = await blueharvest.addMask(e, 'gray', z_index = 99999);
+const screenshot = await browser.takeScreenShot();
+blueharvest.removeMask(mask);
 ```
+The default z-index for the mask element is 10000. An optional `z_index` argument can be passed to `addMask()`
+ if you would like to increase the value of a mask's z-index. If the mask appears to be off the desired place, 
+ you can pass optional `x_offset`, `y_offset` and `size_multiplier` arguments to `addMask()` to move/shape the mask manually. 
+
+
+export async function addMask(el: ElementFinder, color, z_index = 10000, x_offset = 0, y_offset = 0, size_multiplier = 1.0) {
+

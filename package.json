@@ -4,7 +4,7 @@
   "description": "protractor helpers",
   "scripts": {
     "tsc": "tsc",
-    "dist": "./scripts/dist.sh",
+    "dist": "bash ./scripts/dist.sh",
     "prepublish": "npm run dist"
   },
   "repository": {
