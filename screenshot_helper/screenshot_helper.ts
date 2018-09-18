@@ -52,7 +52,7 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
       }
       if (!equal) {
         if (outputFolder) {
-          const diffPath = `${outputFolder}/${goldenName}_diff.png`;
+          const diffPath = `${outputFolder}/diff-${path.basename(golden)}`;
           console.log(diffPath);
           looksSame.createDiff({
             reference: golden,
