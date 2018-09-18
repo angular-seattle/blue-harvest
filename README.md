@@ -35,7 +35,7 @@ you can add a coloured mask to a certain element before you take the screenshot 
 `addMask()` returns the mask element, which can be passed to `removeMask()` to be removed.
 ```
 const e = element(by.css('element_to_ignore'));
-const mask = await blueharvest.addMask(e, 'gray', z_index = 99999);
+const mask = await blueharvest.addMask(e, 'gray', 99999, 10, 20, 1.1);
 const screenshot = await browser.takeScreenShot();
 blueharvest.removeMask(mask);
 ```
