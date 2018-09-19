@@ -186,6 +186,29 @@ export class ChainedAction {
   }
 
   /**
+   * Returns a WebElement from the given locator and satisfying the
+   * current context, or null if no element was found.
+   * Only use this method if you need to use the returned WebElement, otherwise
+   * prefer `see`.
+   * Note that this method, unlike other actions, does not throw if the element
+   * is not found.
+   */
+  async find(locator: FlexibleLocator, options?: BrowserSideOptions):
+      Promise<WebElement|null> {
+    const description = `${this.description()}find(${this.pretty(locator)})`;
+    log(description);
+
+    try {
+      return await this.getElement(locator, description);
+    } catch (e) {
+      if (e.message.startsWith(`Failed to find ${description}`)) {
+        return null;
+      }
+      throw e;
+    }
+  }
+
+  /**
    * Returns true if an element with the given locator and satisfying the
    * current context exists. Throws an error if an element cannot be found.
    */
@@ -281,6 +304,8 @@ export class ChainedAction {
 const defaultAction = ActionContext.default();
 
 const baseAction = new ChainedAction(defaultAction);
+
+export const find = baseAction.find.bind(baseAction);
 
 export const see = baseAction.see.bind(baseAction);
 
