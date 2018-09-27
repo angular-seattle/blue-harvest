@@ -25,9 +25,11 @@ let looksSame: LooksSame = require('looks-same');
  * variable is set, the promise resolves to true and the
  * golden image is updated.
  *
- * @param data The screenshot image data.
- * @param golden The path to the golden image to compare to.
- * @param outputFolder (optional) path where to save the diff. if it is not provided, the difference image will not be
+
+ * @param data - The screenshot image data.
+ * @param golden - The path to the golden image to compare to.
+ * @param outputFolder - The destination path for saving the diff. if it is not provided, the difference image will not be
+
  *   saved.
  */
 export async function compareScreenshot(data, golden, outputFolder = undefined): Promise<string> {
@@ -84,11 +86,11 @@ async function writeScreenshot(folder, data) {
   return screenshotFile;
 }
 
-export async function addMask(el: ElementFinder, color, z_index = 10000, x_offset = 0, y_offset = 0, size_multiplier = 1.0) {
+export async function addMask(el: ElementFinder, color, zIndex = 10000, xOffset = 0, yOffset = 0, sizeMultiplier = 1.0) {
   let size = await el.getSize();
   let location = await el.getLocation();
-  const mask: WebElement = <WebElement> await browser.executeScript(mask_fn, location.x + x_offset, location.y + y_offset,
-    size.width*size_multiplier, size.height*size_multiplier, color, z_index);
+  const mask: WebElement = <WebElement> await browser.executeScript(mask_fn, location.x + xOffset, location.y + yOffset,
+    size.width*sizeMultiplier, size.height*sizeMultiplier, color, zIndex);
   return mask;
 }
 
