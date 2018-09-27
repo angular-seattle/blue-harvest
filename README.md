@@ -50,6 +50,6 @@ const mask = await blueharvest.addMask(e, 'gray', 99999, 10, 20, 1.1);
 const screenshot = await browser.takeScreenShot();
 blueharvest.removeMask(mask);
 ```
-The default z-index for the mask element is 10000. An optional `z_index` argument can be passed to `addMask()`
+The default z-index for the mask element is 10000. An optional `zIndex` argument can be passed to `addMask()`
  if you would like to increase the value of a mask's z-index. If the mask appears to be off the desired place, 
- you can pass optional `x_offset`, `y_offset` and `size_multiplier` arguments to `addMask()` to move/shape the mask manually. 
+ you can pass optional `xOffset`, `yOffset` and `sizeMultiplier` arguments to `addMask()` to move/shape the mask manually. 

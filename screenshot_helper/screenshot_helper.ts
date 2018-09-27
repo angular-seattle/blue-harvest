@@ -25,9 +25,11 @@ let looksSame: LooksSame = require('looks-same');
  * variable is set, the promise resolves to true and the
  * golden image is updated.
  *
+
  * @param data - The screenshot image data.
  * @param golden - The path to the golden image to compare to.
  * @param outputFolder - The destination path for saving the diff. if it is not provided, the difference image will not be
+
  *   saved.
  */
 export async function compareScreenshot(data, golden, outputFolder = undefined): Promise<string> {
