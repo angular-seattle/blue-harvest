@@ -63,6 +63,7 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
           }, (err) => {
             if (err) {
               reject('An error occurred while saving the diff image: ' + err);
+              return;
             }
             reject(`Screenshots do not match for ${golden}. Difference picture is saved as ${diffPath}.`);
           });
