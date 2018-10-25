@@ -54,18 +54,19 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
       }
       if (!equal) {
         if (outputFolder) {
-          const diffPath = `${outputFolder}/diff-${path.basename(golden)}`;
-          console.log(diffPath);
+          const diffPath = path.join(outputFolder, `diff-${goldenName}`);
           looksSame.createDiff({
             reference: golden,
             current: screenshotPath,
             diff: diffPath,
             highlightColor: '#ff00ff',  // color to highlight the differences
           }, (err) => {
-            reject('SAVING DIFF ERROR: ' + err);
-            return;
+            if (err) {
+              reject('An error occurred while saving the diff image: ' + err);
+              return;
+            }
+            reject(`Screenshots do not match for ${golden}. Difference picture is saved as ${diffPath}.`);
           });
-          reject(`Screenshots do not match for ${golden}. Difference picture is saved as ${diffPath}.`);
         } else { reject(`Screenshots do not match for ${golden}.`); }
       } else {
         resolve('The test passed. ');
