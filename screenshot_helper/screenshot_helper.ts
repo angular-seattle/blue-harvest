@@ -32,7 +32,7 @@ let looksSame: LooksSame = require('looks-same');
 
  *   saved.
  */
-export async function compareScreenshot(data, golden, outputFolder = undefined): Promise<string> {
+export async function compareScreenshot(data, golden, outputFolder = undefined, compareTolerance = 2.5): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     const tempFolder = createTempFolder();
     const screenshotPath = await writeScreenshot(tempFolder, data);
@@ -46,7 +46,7 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
     const goldenName = path.basename(golden);
     looksSame(screenshotPath, golden, {
       strict: false,
-      tolerance: 2.5,
+      tolerance: compareThreshold,
     }, async (error, equal) => {
       if (error) {
         reject("There has been an error. Error: " + error);
