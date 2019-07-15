@@ -1,11 +1,22 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import * as looksSame from 'looks-same';
 
 import { browser, ElementFinder, WebElement } from 'protractor';
 
 let mask_fn = require('./mask').MASK_FN;
+
+/*
+ * Create shim for LooksSame typing.
+ */
+export interface LooksSame {
+  (img1: string, img2: string, options: Object, check: (error: any, equal: any) => void);
+  (img1: string, img2: string, check: (error: any, equal: any) => void);
+  createDiff(options: Object, err: Function);
+}
+
+// Require looks-same casted with shim interface LooksSame typing.
+let looksSame: LooksSame = require('looks-same');
 
 /**
  * Compare a screenshot to a reference, or "golden" image.
@@ -21,7 +32,7 @@ let mask_fn = require('./mask').MASK_FN;
 
  *   saved.
  */
-export async function compareScreenshot(data, golden, outputFolder = undefined, looksSameOptions: looksSame.LooksSameOptions): Promise<string> {
+export async function compareScreenshot(data, golden, outputFolder = undefined): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     const tempFolder = createTempFolder();
     const screenshotPath = await writeScreenshot(tempFolder, data);
@@ -34,11 +45,8 @@ export async function compareScreenshot(data, golden, outputFolder = undefined, 
     }
     const goldenName = path.basename(golden);
     looksSame(screenshotPath, golden, {
-      ...{
-        strict: false,
-          tolerance: 2.5,
-      },
-      ...looksSameOptions,
+      strict: false,
+      tolerance: 2.5,
     }, async (error, equal) => {
       if (error) {
         reject("There has been an error. Error: " + error);
