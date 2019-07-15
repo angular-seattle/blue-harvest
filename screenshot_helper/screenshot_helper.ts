@@ -21,7 +21,7 @@ let mask_fn = require('./mask').MASK_FN;
 
  *   saved.
  */
-export async function compareScreenshot(data, golden, outputFolder = undefined, looksSameOptions: looksSame.LooksSameOptions): Promise<string> {
+export async function compareScreenshot(data, golden, outputFolder = undefined, looksSameOptions: looksSame.LooksSameOptions = {}): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     const tempFolder = createTempFolder();
     const screenshotPath = await writeScreenshot(tempFolder, data);
