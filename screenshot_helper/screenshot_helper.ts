@@ -38,9 +38,9 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
     const screenshotPath = await writeScreenshot(tempFolder, data);
     // check if goldens need to be updated
     const update = process.env['UPDATE_GOLDENS'] === '1' || process.env['UPDATE_GOLDENS'] === 'true';
-    if (update) {
+    if (update && !fs.existsSync(golden)) {
       fs.writeFileSync(golden, fs.readFileSync(screenshotPath));
-      resolve('Reference image ' + golden +' was successfully updated.');
+      resolve('Reference image ' + golden + ' was successfully updated.');
       return;
     }
     const goldenName = path.basename(golden);
@@ -53,7 +53,10 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
         return;
       }
       if (!equal) {
-        if (outputFolder) {
+        if (update) {
+          fs.writeFileSync(golden, fs.readFileSync(screenshotPath));
+          resolve('Reference image ' + golden + ' was successfully updated.');
+        } else if (outputFolder) {
           const diffPath = path.join(outputFolder, `diff-${goldenName}`);
           looksSame.createDiff({
             reference: golden,
