@@ -68,9 +68,7 @@ export async function compareScreenshot(data, golden, outputFolder = undefined):
               reject('An error occurred while saving the diff image: ' + err);
               return;
             }
-            const currentPath = path.join(outputFolder, `current-${goldenName}`);
-            fs.writeFileSync(currentPath, fs.readFileSync(screenshotPath));
-            reject(`Screenshot ${currentPath} do not match for ${golden}. Difference picture is saved as ${diffPath}.`);
+            reject(`Screenshots do not match for ${golden}. Difference picture is saved as ${diffPath}.`);
           });
         } else { reject(`Screenshots do not match for ${golden}.`); }
       } else {
